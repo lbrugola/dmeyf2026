@@ -1,4 +1,5 @@
-## Problema N° 5 - Feature Engineering con datos Históricos - Grupo B
+# Problema N° 5 - Feature Engineering con datos Históricos - Grupo B
+## Análisis de Resultados
 ### Alejandro Cortiñas - Luciano Brúgola
 
 
@@ -228,47 +229,47 @@ for (experimento in experimentos) {
     
     # 1. Extraer y quedarse con la ÚLTIMA ocurrencia de INICIO por semilla
     df_inicio <- data.frame(linea = lines[str_detect(lines, "INICIO semilla")]) %>%
-      extract(
+      tidyr::extract(
         linea, 
         into = c("timestamp_start", "semilla"), 
         regex = "===\\s+(.*?)\\s+INICIO semilla\\s+(\\d+)", 
         remove = TRUE
       ) %>%
-      mutate(timestamp_start = ymd_hms(timestamp_start)) %>%
-      group_by(semilla) %>%
-      slice_tail(n = 1) %>%  # Se queda con el último inicio registrado
-      ungroup()
+      dplyr::mutate(timestamp_start = ymd_hms(timestamp_start)) %>%
+      dplyr::group_by(semilla) %>%
+      dplyr::slice_tail(n = 1) %>%  # Se queda con el último inicio registrado
+      dplyr::ungroup()
     
     # 2. Extraer y quedarse con la ÚLTIMA ocurrencia de OK/FALLO por semilla
     df_fin <- data.frame(linea = lines[str_detect(lines, "(OK|FALLO)\\s+semilla")]) %>%
-      extract(
+      tidyr::extract(
         linea, 
         into = c("timestamp_end", "semilla"), 
         regex = "===\\s+(.*?)\\s+(?:OK|FALLO)\\s+semilla\\s+(\\d+)", 
         remove = TRUE
       ) %>%
-      mutate(timestamp_end = ymd_hms(timestamp_end)) %>%
-      group_by(semilla) %>%
-      slice_tail(n = 1) %>%  # Se queda con el último fin registrado
-      ungroup()
+      dplyr::mutate(timestamp_end = ymd_hms(timestamp_end)) %>%
+      dplyr::group_by(semilla) %>%
+      dplyr::slice_tail(n = 1) %>%  # Se queda con el último fin registrado
+      dplyr::ungroup()
     
     # 3. Join y cálculo de duración en minutos (garantiza 1 sola fila por semilla)
-    df_tiempos_exp <- inner_join(df_inicio, df_fin, by = "semilla") %>%
-      mutate(
+    df_tiempos_exp <- dplyr::inner_join(df_inicio, df_fin, by = "semilla") %>%
+      dplyr::mutate(
         Experimento  = exp_nombre,
         Duracion_min = as.numeric(difftime(timestamp_end, timestamp_start, units = "mins"))
       ) %>%
-      filter(Duracion_min >= 0) # Filtra posibles inconsistencias temporales
+      dplyr::filter(Duracion_min >= 0) # Filtra posibles inconsistencias temporales
     
-    tiempos_ejecucion <- bind_rows(tiempos_ejecucion, df_tiempos_exp)
+    tiempos_ejecucion <- dplyr::bind_rows(tiempos_ejecucion, df_tiempos_exp)
   }
 }
 
 # ── Resumen de tiempos por Experimento ───────────────────────
-resumen_tiempos <- tiempos_ejecucion %>%
+resumen_tiempos <- as.data.frame(tiempos_ejecucion) %>%
   dplyr::filter(!(semilla %in% semillas_adicionales)) %>% 
-  group_by(Exp) %>%
-  summarise(
+  dplyr::group_by(Experimento) %>%
+  dplyr::summarise(
     Semillas_Completadas = n(),
     Tiempo_Total_hs      = round(sum(Duracion_min, na.rm = TRUE) / 60, 2),
     Promedio_por_Semilla_min = round(mean(Duracion_min, na.rm = TRUE), 2),
@@ -279,8 +280,7 @@ resumen_tiempos <- tiempos_ejecucion %>%
 
 # Mostrar la tabla resumida de tiempos por experimento
 resumen_tiempos %>%
-  kbl(caption = "Resumen de Tiempos de Ejecución por Experimento", align = "c") %>%
-  kable_styling(bootstrap_options = c("striped", "hover"), full_width = FALSE)
+  print()
 
 
 ```
@@ -288,11 +288,15 @@ resumen_tiempos %>%
 
 
 ```{r}
+str(tiempos_ejecucion)
+```
+
+```{r}
 # Leo los datos de los distintos experimentos-semillas (15 semillas)
 experimentos <- list.dirs(path = ".",recursive = FALSE)
 
 # excluimos los experimentos extra
-experimentos <- experimentos[experimentos %in% c("./Exp9110","./Exp9111","./Exp9112","./Exp9116","./Exp9117")]
+experimentos <- experimentos[experimentos %in% c("./WF9110","./WF9111","./WF9112","./WF9116","./WF9117")]
 
 ganancias_maximas <- data.frame()
 df_importancia <- data.frame()
@@ -308,9 +312,7 @@ for (experimento in experimentos) {
 
   # experimento <- experimentos[1]
   
-  subcarpeta <- list.dirs(experimento,recursive = FALSE)
-  
-  semillas <- list.dirs(path = subcarpeta,recursive = FALSE)
+  semillas <- list.dirs(path = experimento,recursive = FALSE)
   semillas <- semillas[str_detect(semillas,"semilla")]
   
   data_grafico <- data.frame()
@@ -481,37 +483,37 @@ for (experimento in experimentos) {
     
     # 1. Extraer y quedarse con la ÚLTIMA ocurrencia de INICIO por semilla
     df_inicio <- data.frame(linea = lines[str_detect(lines, "INICIO semilla")]) %>%
-      extract(
+      tidyr::extract(
         linea, 
         into = c("timestamp_start", "semilla"), 
         regex = "===\\s+(.*?)\\s+INICIO semilla\\s+(\\d+)", 
         remove = TRUE
       ) %>%
-      mutate(timestamp_start = ymd_hms(timestamp_start)) %>%
-      group_by(semilla) %>%
-      slice_tail(n = 1) %>%  # Se queda con el último inicio registrado
-      ungroup()
+      dplyr::mutate(timestamp_start = ymd_hms(timestamp_start)) %>%
+      dplyr::group_by(semilla) %>%
+      dplyr::slice_tail(n = 1) %>%  # Se queda con el último inicio registrado
+      dplyr::ungroup()
     
     # 2. Extraer y quedarse con la ÚLTIMA ocurrencia de OK/FALLO por semilla
     df_fin <- data.frame(linea = lines[str_detect(lines, "(OK|FALLO)\\s+semilla")]) %>%
-      extract(
+      tidyr::extract(
         linea, 
         into = c("timestamp_end", "semilla"), 
         regex = "===\\s+(.*?)\\s+(?:OK|FALLO)\\s+semilla\\s+(\\d+)", 
         remove = TRUE
       ) %>%
-      mutate(timestamp_end = ymd_hms(timestamp_end)) %>%
-      group_by(semilla) %>%
-      slice_tail(n = 1) %>%  # Se queda con el último fin registrado
-      ungroup()
+      dplyr::mutate(timestamp_end = ymd_hms(timestamp_end)) %>%
+      dplyr::group_by(semilla) %>%
+      dplyr::slice_tail(n = 1) %>%  # Se queda con el último fin registrado
+      dplyr::ungroup()
     
     # 3. Join y cálculo de duración en minutos (garantiza 1 sola fila por semilla)
     df_tiempos_exp <- inner_join(df_inicio, df_fin, by = "semilla") %>%
-      mutate(
+      dplyr::mutate(
         Experimento  = exp_nombre,
         Duracion_min = as.numeric(difftime(timestamp_end, timestamp_start, units = "mins"))
       ) %>%
-      filter(Duracion_min >= 0) # Filtra posibles inconsistencias temporales
+      dplyr::filter(Duracion_min >= 0) # Filtra posibles inconsistencias temporales
     
     tiempos_ejecucion <- bind_rows(tiempos_ejecucion, df_tiempos_exp)
   }
@@ -520,8 +522,8 @@ for (experimento in experimentos) {
 # ── Resumen de tiempos por Experimento ───────────────────────
 resumen_tiempos <- tiempos_ejecucion %>%
   dplyr::filter(!(Experimento=="Exp9117" & semilla %in% semillas_adicionales)) %>% 
-  group_by(Experimento) %>%
-  summarise(
+  dplyr::group_by(Experimento) %>%
+  dplyr::summarise(
     Semillas_Completadas = n(),
     Tiempo_Total_hs      = round(sum(Duracion_min, na.rm = TRUE) / 60, 2),
     Promedio_por_Semilla_min = round(mean(Duracion_min, na.rm = TRUE), 2),
@@ -532,8 +534,7 @@ resumen_tiempos <- tiempos_ejecucion %>%
 
 # Mostrar la tabla resumida de tiempos por experimento
 resumen_tiempos %>%
-  kbl(caption = "Resumen de Tiempos de Ejecución por Experimento", align = "c") %>%
-  kable_styling(bootstrap_options = c("striped", "hover"), full_width = FALSE)
+  print()
 
 
 ```
@@ -710,13 +711,7 @@ resumen_ganancias <- promedio_de_maximos %>%
   dplyr::inner_join(maximo_del_promedio, by = "Exp")
 
 # Mostrar tabla profesional
-resumen_ganancias %>%
-  kbl(caption = "Consolidado: Promedio de Máximos vs. Máximo del Promedio",
-      col.names = c("Experimento","Promedio de Maximos","Envios Optimos de la curva Promedio","Maximo de la curva Promedio"),
-      digits = 2,
-      align = c("l", "c", "c", "c", "c")) %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = FALSE) %>%
-  row_spec(0, bold = TRUE, background = "#2c3e50", color = "white")
+resumen_ganancias
 
 # Mostrar tabla profesional
 ganancias_maximas %>%
@@ -725,13 +720,7 @@ ganancias_maximas %>%
   tidyr::pivot_wider(names_from = semilla,values_from = Ganancia_Max_Suavizada,values_fill = "-") %>% 
   dplyr::left_join(y = promedio_de_maximos %>% dplyr::select(-Promedio_Envios_max),by = c("Experimento"="Exp")) %>% 
   dplyr::left_join(y = maximo_del_promedio %>% dplyr::select(-Envios_Optimos),by = c("Experimento"="Exp")) %>% 
-  dplyr::rename(Curva_Promedio = Maximo_del_Promedio) %>% 
-  kbl(caption = "Ganancia Maxima por Experimento y semilla (en millones de pesos)",
-    # col.names = c("Experimento","Promedio de Maximos","Envios Optimos de la curva Promedio","Maximo de la curva Promedio"),
-    digits = 2,
-    align = c("l",rep("c",17))) %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = FALSE) %>%
-  row_spec(0, bold = TRUE, background = "#2c3e50", color = "white")
+  dplyr::rename(Curva_Promedio = Maximo_del_Promedio)
 
 ganancias_maximas %>%
   dplyr::select(-Ganancia_Max_Suavizada) %>% 
@@ -739,12 +728,7 @@ ganancias_maximas %>%
   tidyr::pivot_wider(names_from = semilla,values_from = Envios_Ganancia_Max_Suavizada,values_fill = "-") %>% 
   dplyr::left_join(y = promedio_de_maximos %>% dplyr::select(-Promedio_de_Maximos),by = c("Experimento"="Exp")) %>% 
   dplyr::left_join(y = maximo_del_promedio %>% dplyr::select(-Maximo_del_Promedio),by = c("Experimento"="Exp")) %>% 
-  dplyr::rename(Curva_Promedio = Envios_Optimos) %>% 
-  kbl(caption = "Envios Optimos por Experimento y semilla",
-    digits = 2,
-    align = c("l",rep("c",17))) %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = FALSE) %>%
-  row_spec(0, bold = TRUE, background = "#2c3e50", color = "white")
+  dplyr::rename(Curva_Promedio = Envios_Optimos)
 ```
 
 
