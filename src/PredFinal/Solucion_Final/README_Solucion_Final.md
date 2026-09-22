@@ -58,3 +58,10 @@ Finalmente se ejecuta el notebook crear_ensemble.ipynb que genera y sube la solu
 Se adoptó este enfoque, en lugar de calcular el promedio directo de la probabilidad de baja debido a que en ambos experimentos se utiliza un undersampling muy distinto. En el Exp9104 el undersampling es mucho más agresivo que en el Exp9100 (0.01 vs 0.1), por lo tanto sus probabilidades de baja tenderán a ser sistemáticamente mayores debido a que la cantidad de clientes CONTINUA en el entrenamiento se reduce de forma más drástica. Si consideráramos el promedio de las probabilidades, el Exp9104 prevalecerá sobre Exp9100, es decir, no tomaríamos en cuenta la señal del Exp9100 porque sus probabilidades son de menor magnitud. Este método neutraliza la diferencia de escala entre las probabilidades de ambos experimentos.
 
 Además de subir a kaggle la solución final, también se almacena, en una carpeta llamada kaggle, que se aloja dentro de la carpeta de nombre WF9121_ensemble, dentro del bucket. También se guarda la predicción final calculada como consolidación de todos los semilla-experimento dentro de WF9121_ensemble.
+
+## Notebooks originales
+
+En esta carpeta también se encuentran los notebooks originales de cada experimento (no se utilizan en la generación, ya que se emplean los de múltiple semilla ya mencionados):
+
+- 729_final_junior_Luciano_Brugola_Exp9100.ipynb
+- 729_final_junior_Luciano_Brugola_Exp9104.ipynb
