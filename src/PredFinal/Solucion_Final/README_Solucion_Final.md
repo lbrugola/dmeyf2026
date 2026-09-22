@@ -32,6 +32,20 @@ Se ejecuta el script ./multiple_semilla/run_9100_10semillas.sh que lo que hace e
 
 Se ejecuta el script ./multiple_semilla/run_9104_10semillas.sh que lo que hace es ejecutar 10 veces (con una semilla distinta en cada ocasión, las mismas que para Exp9100) el script 729_final_junior_Luciano_Brugola_Exp9104_multi_semilla.ipynb, generando una carpeta llamada WF9104_multi_semilla y guardando allí un archivo prediccion_semilla_<nro_semilla> para cada semilla.
 
+Estos dos scripts se ejecutan de la siguiente manera. Parado en la carpeta multiple_semilla, que es la que los contiene, en la terminal ejecutar:
+
+```bash
+chmod +x run_9100_10semillas.sh
+nohup bash run_9100_10semillas.sh > salida_Exp9100.log 2>&1 &
+```
+
+```bash
+chmod +x run_9104_10semillas.sh
+nohup bash run_9104_10semillas.sh > salida_Exp9104.log 2>&1 &
+```
+
+Los archivos .log dejan en la misma carpeta del script una bitácora de progreso de ejecución con tiempo de inicio y fin por cada semilla.
+
 ### Ensemble con solución final
 
 Finalmente se ejecuta el notebook crear_ensemble.ipynb que genera y sube la solución final con 1850 cortes. Dicho notebook lee las predicciones generadas en la ejecución de 10 semillas de cada experimento, que quedan alojadas en las respectivas carpetas (WF<nro_experimento>_multi_semilla), luego 
