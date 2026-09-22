@@ -26,11 +26,11 @@ En este experimento se optó por las siguientes modificaciones respecto al basel
 
 ### Exp9100 con 10 semillas
 
-Se ejecuta el script run_9100_10semillas.sh que lo que hace es ejecutar 10 veces (con una semilla distinta en cada ocasión) el script 729_final_junior_Luciano_Brugola_Exp9100_multi_semilla.ipynb, generando una carpeta llamada WF9100_multi_semilla y guardando allí un archivo prediccion_semilla_<nro_semilla> para cada semilla.
+Se ejecuta el script ./multiple_semilla/run_9100_10semillas.sh que lo que hace es ejecutar 10 veces (con una semilla distinta en cada ocasión) el script 729_final_junior_Luciano_Brugola_Exp9100_multi_semilla.ipynb, generando una carpeta llamada WF9100_multi_semilla y guardando allí un archivo prediccion_semilla_<nro_semilla> para cada semilla.
 
 ### Exp9104 con 10 semillas
 
-Se ejecuta el script run_9104_10semillas.sh que lo que hace es ejecutar 10 veces (con una semilla distinta en cada ocasión, las mismas que para Exp9100) el script 729_final_junior_Luciano_Brugola_Exp9104_multi_semilla.ipynb, generando una carpeta llamada WF9104_multi_semilla y guardando allí un archivo prediccion_semilla_<nro_semilla> para cada semilla.
+Se ejecuta el script ./multiple_semilla/run_9104_10semillas.sh que lo que hace es ejecutar 10 veces (con una semilla distinta en cada ocasión, las mismas que para Exp9100) el script 729_final_junior_Luciano_Brugola_Exp9104_multi_semilla.ipynb, generando una carpeta llamada WF9104_multi_semilla y guardando allí un archivo prediccion_semilla_<nro_semilla> para cada semilla.
 
 ### Ensemble con solución final
 
