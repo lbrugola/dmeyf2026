@@ -1,6 +1,6 @@
 # Solución Final
 
-La solución final consiste en un ensemble de los siguientes experimentos ejecutados con l0 semillas distintas (las mismas para ambos experimentos).
+La solución final consiste en un ensemble de los siguientes experimentos ejecutados con 10 semillas distintas (las mismas para ambos experimentos).
 
 ## Experimento WF9100
 
@@ -26,18 +26,18 @@ En este experimento se optó por las siguientes modificaciones respecto al basel
 
 ### Exp9100 con 10 semillas
 
-Se ejecuta el script run_9100_10semillas.sh que lo que hace es ejecutar 10 veces con 10 semillas distintas el script 729_final_junior_Luciano_Brugola_Exp9100_multi_semilla.ipynb, generando una carpeta llamada WF9100_multi_semilla y guardando allí un archivo prediccion_semilla_<nro_semilla> para cada semilla.
+Se ejecuta el script run_9100_10semillas.sh que lo que hace es ejecutar 10 veces (con una semilla distinta en cada ocasión) el script 729_final_junior_Luciano_Brugola_Exp9100_multi_semilla.ipynb, generando una carpeta llamada WF9100_multi_semilla y guardando allí un archivo prediccion_semilla_<nro_semilla> para cada semilla.
 
 ### Exp9104 con 10 semillas
 
-Se ejecuta el script run_9104_10semillas.sh que lo que hace es ejecutar 10 veces con 10 semillas distintas el script 729_final_junior_Luciano_Brugola_Exp9104_multi_semilla.ipynb, generando una carpeta llamada WF9104_multi_semilla y guardando allí un archivo prediccion_semilla_<nro_semilla> para cada semilla.
+Se ejecuta el script run_9104_10semillas.sh que lo que hace es ejecutar 10 veces (con una semilla distinta en cada ocasión, las mismas que para Exp9100) el script 729_final_junior_Luciano_Brugola_Exp9104_multi_semilla.ipynb, generando una carpeta llamada WF9104_multi_semilla y guardando allí un archivo prediccion_semilla_<nro_semilla> para cada semilla.
 
 ### Ensemble con solución final
 
 Finalmente se ejecuta el notebook crear_ensemble.ipynb que genera y sube la solución final con 1850 cortes. Dicho notebook lee las predicciones generadas en la ejecución de 10 semillas de cada experimento, que quedan alojadas en las respectivas carpetas (WF<nro_experimento>_multi_semilla), luego 
 
 - Se calcula la posición de cada cliente en cada predicción de cada semilla-experimento según la probabilidad de baja en forma ascendente.
-- Se genera un score continuo calculado como el cociente entre la posición recién calculada y la cantidad total de clientes únicos. Este score es un valor en el (0,1], siendo un valor cercano a 0 para aquellos clientes con baja probabilidad de baja y 1 para aquellos clientes con alta probabilidad de baja.
+- Se genera un score continuo calculado como el cociente entre la posición recién calculada y la cantidad total de clientes únicos. Este score es un valor en el (0,1], siendo un valor cercano a 0 para aquellos clientes con baja probabilidad de baja y cercano a 1 para aquellos clientes con alta probabilidad de baja.
 - Se agrupa por numero_de_cliente calculando el promedio, sobre las 20 predicciones (10 semillas x 2 experimentos),  del score recién calculado.
 - Luego se ordena de mayor a menor según el promedio para marcar a los de mayor promedio con envío, para distintos cortes.
 
